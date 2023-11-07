@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app) # define db el cual es un objeto para definir bases de dato, modelos, CRUD, ----- en pocas palabras sirve para interactuar con la base de datos 
 
+
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
@@ -13,6 +14,7 @@ class Todo(db.Model):
 
     def __repr__(self):
         return'<Task %r>' % self.id
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -30,6 +32,7 @@ def index():
         tasks = Todo.query.order_by(Todo.date_created).all() # puedo poner first() para agarrar el maas reciente
         return render_template('index.html', tasks=tasks)
 
+
 @app.route('/delete/<int:id>')
 def delete(id):
     task_to_delete = Todo.query.get_or_404(id)
@@ -40,6 +43,7 @@ def delete(id):
         return redirect('/')
     except:
         return "Hubo un problema al intentar borrar la tarea"
+
 
 @app.route('/update/<int:id>', methods=['GET','POST'])
 def update(id):
@@ -53,6 +57,7 @@ def update(id):
             return "Hubo un problema actualizando la tarea"
     else:
         return render_template('update.html', task=task)
+
 
 if __name__ == "__main__":  # debuggea constantemente lo que hay en la pagina y la inicializa
     app.run(debug=True)
